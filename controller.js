@@ -10,8 +10,9 @@ var path          = require('path');
 var util          = require('util');
 var os            = require('os');
 var strongPaswordGenerator = require("strong-password-generator");
-
 var nodemailer = require('nodemailer');
+
+
 app.use(bodyParser.urlencoded({extended:true}));
 module.exports = (function() {
 	return{
@@ -300,7 +301,7 @@ module.exports = (function() {
 					<body> \
 					 \
 					<p>Dear "+FName+" "+ MName+" "+ LName+"  </p> \
-					Your Login details are given below, please attempt login with the retreived credentials. \
+					Your Login details are given below, please login with the retreived credentials. \
 					<br> \
 					<table > \
 					<tr > \
@@ -315,18 +316,18 @@ module.exports = (function() {
 						<td>"+password+"</td> \
 					  </tr> \
 					</table> \
-					 Regards SecureCert\
+					<br>Regards SecureCert\
 					</body>" 
 					
 					  var transporter = nodemailer.createTransport({
 						service: 'Gmail',
 						auth: {
-							   user: 'underdogs15it@gmail.com',
-							   pass: 'beitunderdogs'
+							   user: 'dummyuniversity2019@gmail.com',
+							   pass: 'dummyuni2019'
 						   }
 					   });
 					  const mailOptions = {
-						from: 'underdogs15it@gmail.com', // sender address
+						from: 'dummyuniversity2019@gmail.com', // sender address
 						to:E_Id, // list of receivers
 						subject: 'Student Enrollment Credentials', // Subject line
 						html:   htmlData  // plain text body
@@ -353,14 +354,13 @@ module.exports = (function() {
 	},
 
 	addNewCertificate: function(req, res, next) {
-		console.log(req.body);
-		//console.log(req);
+		//console.log(req.body);		
 		console.log("submit recording of a cert catch: ");
 		var PRno = req.body['cert_PRno']
-	    var CName = req.body['cert_CName']
-	    var Seatno = req.body['cert_Seatno']
-	    var examination = req.body['cert_examination']
-	    var YOP = req.body['cert_YOP']
+	    	var CName = req.body['cert_CName']
+	    	var Seatno = req.body['cert_Seatno']
+		var examination = req.body['cert_examination']
+	    	var YOP = req.body['cert_YOP']
 //		var sub = req.body['cert_subject']
 		var a=req.body['cert_subject'];
 		var b=req.body['cert_subject2'];
@@ -372,8 +372,27 @@ module.exports = (function() {
 		var sub={sub1:a,sub2:b,sub3:c,sub4:d,sub5:e,sub6:f};
 		var subjectObj=JSON.stringify(sub);
 
-		console.log(subjectObj);
+		//console.log(subjectObj);
 
+		
+		/*var PRno = req.body.cert_PRno
+	    	var CName = req.body.cert_CName
+	    	var Seatno = req.body.cert_Seatno
+	    	var examination = req.body.cert_examination
+	    	var YOP = req.body.cert_YOP
+
+		var a=req.body.cert_subject;
+		var b=req.body.cert_subject2;
+		var c=req.body.cert_subject3;
+		var d=req.body.cert_subject4;
+		var e=req.body.cert_subject5;
+		var f=req.body.cert_subject6;
+
+		var sub={sub1:a,sub2:b,sub3:c,sub4:d,sub5:e,sub6:f};
+		var subjectObj=JSON.stringify(sub);
+		*/
+
+		
 		var fabric_client = new Fabric_Client();
 
 		// setup the fabric network
@@ -477,7 +496,7 @@ module.exports = (function() {
 		            let handle = setTimeout(() => {
 		                event_hub.disconnect();
 		                resolve({event_status : 'TIMEOUT'}); //we could use reject(new Error('Trnasaction did not complete within 30 seconds'));
-		            }, 3000);
+		            }, 6000);
 		            event_hub.connect();
 		            event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
 		                // this is the callback for transaction event status
@@ -520,9 +539,11 @@ module.exports = (function() {
 
 		    if(results && results[1] && results[1].event_status === 'VALID') {
 		        console.log('Successfully committed the change to the ledger by the peer');
+			res.writeHead("Successfully posted data to ledger.").status(200);
 		        //res.send(tx_id.getTransactionID());
 		    } else {
 		        console.log('Transaction failed to be committed to the ledger due to ::'+results[1].event_status);
+			res.writeHead('Failed to post data to ledger.').status(400);
 		    }
 		}).catch((err) => {
 		    console.error('Failed to invoke successfully :: ' + err);
@@ -533,17 +554,17 @@ module.exports = (function() {
 		console.log(req.body);
 		//console.log(req);
 		console.log("submit recording of a student: ");
-		
+
 var pass=strongPaswordGenerator.generatePassword(defaultPasswordConfig);
 var defaultPasswordConfig = {
   base: 'WORD',
   length: {
-    min: 10,
-    max: 10
+    min: 4,
+    max: 4
   },
   capsLetters: {
-    min: 3,
-    max: 3
+    min: 2,
+    max: 2
   },
   numerals: {
     min: 2,
@@ -560,16 +581,28 @@ var defaultPasswordConfig = {
     max: 0
   }
 };
-    var PRno = req.body['cert_PRno']
+ 		var PRno = req.body['cert_PRno']
 		var password = pass
 		var FName = req.body['firstName']
 		var MName =req.body['secondName']
 		var LName = req.body['surname']
 		var CName = req.body['collegeName']
 		var branch = req.body['branch']
-	    var YOA = req.body['YOA']
+	    	var YOA = req.body['YOA']
 		var EId = req.body['emailId']
 		var mobile=req.body['mobileNumber']
+
+		/*var PRno = req.body.cert_PRno
+		var password = pass
+		var FName = req.body.firstName
+		var MName =req.body.secondName
+		var LName = req.body.surname
+		var CName = req.body.collegeName
+		var branch = req.body.branch
+	    	var YOA = req.body.YOA
+		var EId = req.body.emailId
+		var mobile=req.body.mobileNumber*/
+
 
 		var fabric_client = new Fabric_Client();
 
@@ -670,7 +703,7 @@ var defaultPasswordConfig = {
 		            let handle = setTimeout(() => {
 		                event_hub.disconnect();
 		                resolve({event_status : 'TIMEOUT'}); //we could use reject(new Error('Trnasaction did not complete within 30 seconds'));
-		            }, 3000);
+		            }, 10000);
 		            event_hub.connect();
 		            event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
 		                // this is the callback for transaction event status
@@ -745,18 +778,18 @@ Your Login details are given below, please login with the credentials to view yo
     <td>"+password+"</td> \
   </tr> \
 </table> \
- Regards SecureCert\
+ <br>Regards SecureCert\
 </body>" 
 
   var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-           user: 'underdogs15it@gmail.com',
-           pass: 'beitunderdogs'
+           user: 'dummyuniversity2019@gmail.com',
+           pass: 'dummyuni2019'
        }
    });
   const mailOptions = {
-    from: 'underdogs15it@gmail.com', // sender address
+    from: 'dummyuniversity2019@gmail.com', // sender address
     to:EId, // list of receivers
     subject: 'Student Enrollment Credentials', // Subject line
     html:   htmlData  // plain text body
